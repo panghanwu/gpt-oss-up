@@ -1,0 +1,2 @@
+# Top-level pin for .venv-litellm; after editing run: bash lock.sh
+litellm[proxy]==1.106.6

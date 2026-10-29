@@ -6,24 +6,14 @@
 set -euo pipefail
 HERE="$(cd "$(dirname "$0")" && pwd)"
 
-VLLM_CONTAINER=vllm-gpt-oss-120b  # must match "vllm-$NAME" in vllm_start.sh
-
-# Refuse to start a second copy, so cleanup() never stops a container this run didn't start
-if docker container inspect "$VLLM_CONTAINER" >/dev/null 2>&1; then
-  echo "$VLLM_CONTAINER already exists; stop it first: docker stop $VLLM_CONTAINER" >&2
-  exit 1
-fi
-
 VLLM_PID=''
 LITELLM_PID=''
 cleanup() {
   trap - EXIT INT TERM HUP
   echo 'stopping LiteLLM and vLLM ...' >&2
-  [[ -n "$LITELLM_PID" ]] && kill "$LITELLM_PID" 2>/dev/null || true
-  # The container may still be starting, so keep stopping it until vllm_start.sh has exited
-  while [[ -n "$VLLM_PID" ]] && kill -0 "$VLLM_PID" 2>/dev/null; do
-    docker stop "$VLLM_CONTAINER" >/dev/null 2>&1 || true
-    sleep 1
+  # TERM only; vllm_start.sh stops its own server and waits for it
+  for pid in "$LITELLM_PID" "$VLLM_PID"; do
+    [[ -n "$pid" ]] && kill "$pid" 2>/dev/null || true
   done
   wait 2>/dev/null || true
 }

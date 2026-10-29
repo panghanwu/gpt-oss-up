@@ -1,0 +1,2 @@
+# Top-level pin for .venv-vllm; after editing run: bash lock.sh
+vllm==0.28.0
