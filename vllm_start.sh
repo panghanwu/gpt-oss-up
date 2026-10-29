@@ -12,7 +12,7 @@ NAME=gpt-oss-120b  # served model name; must match model in config.yaml
 VENV="$HERE/.venv-vllm"
 PORT="${VLLM_PORT:?VLLM_PORT not set in .env}"
 : "${HF_HOME:?HF_HOME not set in .env}" "${GPUS:?GPUS not set in .env}" "${GPU_MEMORY_UTILIZATION:?GPU_MEMORY_UTILIZATION not set in .env}"
-GREETING='請你用 100 字左右介紹你自己，並附上表情符號表達你現在的心情。'
+GREETING='你剛被召喚陣召喚到這個世界。請用 RPG 動畫遊戲角色登場的風格，以 100 字左右自我介紹，並用表情符號表達你現在的心情。'
 
 [[ -x "$VENV/bin/vllm" ]] || { echo "vLLM venv not found: run bash install.sh first" >&2; exit 1; }
 if (exec 3<>"/dev/tcp/127.0.0.1/$PORT") 2>/dev/null; then
