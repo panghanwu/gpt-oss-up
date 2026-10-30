@@ -2,6 +2,12 @@
 
 在本機用 vLLM 跑 gpt-oss-120b，前面接 LiteLLM proxy。兩個服務都只綁 `127.0.0.1`，只有本機連得到。不需要 Docker：vLLM 和 LiteLLM 各自裝在 repo 內的 venv。
 
+> ⚠️ **NVIDIA driver 版本決定能用的 vLLM 版本**
+>
+> - 這個 repo 鎖定 `vllm==0.19.1`（torch 2.10，CUDA 12.8），需要 driver ≥ 570
+> - vLLM 0.20 以後改用 CUDA 13，需要 driver ≥ 580；driver 夠新時再改 `requirements/vllm.in` 升級
+> - 安裝前先用 `nvidia-smi` 確認 `Driver Version`
+
 ```
 client ──> LiteLLM :LITELLM_PORT ──> vLLM :VLLM_PORT (gpt-oss-120b)
 ```
@@ -16,7 +22,7 @@ client ──> LiteLLM :LITELLM_PORT ──> vLLM :VLLM_PORT (gpt-oss-120b)
 | `litellm_start.sh` | 單獨啟動 LiteLLM |
 | `config.yaml` | LiteLLM 設定，只有 `gpt-oss-120b` |
 | `.env.example` | 設定範本，複製成 `.env` 後填寫 |
-| `requirements/*.in` | 直接依賴的版本（`vllm==0.28.0`、`litellm[proxy]==1.106.6`） |
+| `requirements/*.in` | 直接依賴的版本（`vllm==0.19.1`、`litellm[proxy]==1.106.6`） |
 | `requirements/*.txt` | 完整鎖定的依賴，由 `lock.sh` 產生 |
 | `lock.sh` | 改了 `*.in` 之後重新鎖定 |
 
@@ -25,7 +31,7 @@ client ──> LiteLLM :LITELLM_PORT ──> vLLM :VLLM_PORT (gpt-oss-120b)
 | 項目 | 需求 |
 |---|---|
 | GPU | NVIDIA GPU，顯存要放得下 60.8 GiB 權重加 KV cache：單張 80 GB（`GPU_MEMORY_UTILIZATION=0.9`），或兩張以上 |
-| NVIDIA driver | ≥ 580（鎖定的 torch 2.13 用 CUDA 13；`install.sh` 會檢查並警告） |
+| NVIDIA driver | ≥ 570（鎖定的 torch 2.10 用 CUDA 12.8；`install.sh` 會檢查並警告） |
 | 磁碟 | `HF_HOME` 約 61 GiB（權重），另加兩個 venv（vLLM 那個含 torch，數 GB 起跳） |
 | 系統 | Linux x86_64，Bash ≥ 5.1（`start.sh` 用到 `wait -n <pid>`） |
 | Python | [uv](https://docs.astral.sh/uv/)；Python 3.12（uv 找不到時會自己下載） |
