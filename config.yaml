@@ -1,9 +1,9 @@
 model_list:
-  # Local vLLM (vllm_start.sh, or start.sh for both services)
-  - model_name: gpt-oss-120b
+  # Local vLLM (vllm_start.sh, or start.sh for all services); the os.environ/ values are set by litellm_start.sh
+  - model_name: os.environ/MODEL_NAME  # gpt-oss-120b or gpt-oss-20b, from MODEL in .env
     litellm_params:
-      model: hosted_vllm/gpt-oss-120b  # suffix must match --served-model-name in vllm_start.sh
-      api_base: os.environ/VLLM_API_BASE  # set by litellm_start.sh from VLLM_PORT
+      model: os.environ/VLLM_MODEL  # hosted_vllm/<MODEL_NAME>, matches --served-model-name in vllm_start.sh
+      api_base: os.environ/VLLM_API_BASE  # from VLLM_PORT
 
 general_settings:
   master_key: os.environ/LITELLM_MASTER_KEY

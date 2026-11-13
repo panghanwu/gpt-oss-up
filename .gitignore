@@ -1,2 +1,4 @@
 .env
 .venv-*/
+.openwebui-data/
+AGENTS/

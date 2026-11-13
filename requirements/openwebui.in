@@ -1,0 +1,6 @@
+# Top-level pin for .venv-openwebui (bash install.sh full); after editing run: bash lock.sh
+# Python must stay < 3.13 for this release
+open-webui==0.13.3
+# Open WebUI only runs torch on CPU; pinning the torch of vllm.aarch64.in lets uv reuse the same
+# torch and CUDA wheels already downloaded for .venv-vllm (saves several GB on DGX Spark)
+torch==2.14.0

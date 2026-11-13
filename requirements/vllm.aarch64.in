@@ -1,0 +1,7 @@
+# Top-level pin for .venv-vllm on aarch64 (DGX Spark / GB10); after editing run: bash lock.sh
+# The PyPI wheel pulls torch built against CUDA 13.0 (driver >= 580)
+vllm==0.33.0
+# Precompiled FlashInfer kernels, same version as flashinfer-python in the lock; without them vLLM probes
+# NVIDIA's artifactory and FlashInfer downloads kernels at startup. Published only on FlashInfer's index
+--extra-index-url https://flashinfer.ai/whl
+flashinfer-cubin==0.7.2.post1
